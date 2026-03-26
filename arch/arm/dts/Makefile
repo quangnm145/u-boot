@@ -429,6 +429,7 @@ dtb-$(CONFIG_AM33XX) += \
 	am335x-bonegreen-wireless.dtb \
 	am335x-icev2.dtb \
 	am335x-pocketbeagle.dtb \
+	am335x-qnm-bbb.dtb \
 	am335x-pxm50.dtb \
 	am335x-rut.dtb \
 	am335x-sancloud-bbe.dtb \

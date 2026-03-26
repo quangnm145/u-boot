@@ -1,0 +1,7 @@
+QNM BBB BOARD
+M:	Quang Nguyen
+S:	Maintained
+F:	board/qnm/qnm_bbb/
+F:	include/configs/qnm_bbb.h
+F:	configs/qnm_bbb_defconfig
+F:	arch/arm/dts/am335x-qnm-bbb.dts
