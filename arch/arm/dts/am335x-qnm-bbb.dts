@@ -1,0 +1,13 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * QNM AM335x board derived from the BeagleBone Black design.
+ */
+/dts-v1/;
+
+#include "am335x-boneblack.dts"
+
+/ {
+	model = "QNM AM335x BBB Clone";
+	compatible = "qnm,am335x-qnm-bbb", "ti,am335x-bone-black",
+		     "ti,am335x-bone", "ti,am33xx";
+};

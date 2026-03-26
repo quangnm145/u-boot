@@ -1,0 +1,13 @@
+config SYS_BOARD
+	default "qnm_bbb" if TARGET_QNM_BBB
+
+config SYS_VENDOR
+	default "qnm" if TARGET_QNM_BBB
+
+config SYS_SOC
+	default "am33xx" if TARGET_QNM_BBB
+
+config SYS_CONFIG_NAME
+	default "qnm_bbb" if TARGET_QNM_BBB
+
+source "board/ti/common/Kconfig"
