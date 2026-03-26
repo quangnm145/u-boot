@@ -11,7 +11,7 @@ Tai lieu nay mo ta cach build U-Boot cho board QNM_BBB, copy U-Boot vao the SD, 
 Vi du prefix toolchain dang dung trong repo nay:
 
 ```bash
-export CROSS_COMPILE=/home/g704116/x-tools/arm-cortex_a8-linux-gnueabi/bin/arm-cortex_a8-linux-gnueabi-
+export CROSS_COMPILE=/home/<user>/x-tools/arm-cortex_a8-linux-gnueabi/bin/arm-cortex_a8-linux-gnueabi-
 ```
 
 ## 2. Build U-Boot
@@ -104,7 +104,7 @@ Lenh nay se hien:
 
 Ban cung co the xem env:
 
-```bash
+```bashs
 printenv boot_source boot_mmcdev board_name board_rev
 ```
 
@@ -121,7 +121,7 @@ Kiem tra lai cac diem sau:
 ## 8. Lenh build nhanh
 
 ```bash
-export CROSS_COMPILE=/home/g704116/x-tools/arm-cortex_a8-linux-gnueabi/bin/arm-cortex_a8-linux-gnueabi-
+export CROSS_COMPILE=/home/<user>/x-tools/arm-cortex_a8-linux-gnueabi/bin/arm-cortex_a8-linux-gnueabi-
 make ARCH=arm CROSS_COMPILE=${CROSS_COMPILE} qnm_bbb_defconfig
 make ARCH=arm CROSS_COMPILE=${CROSS_COMPILE} -j$(nproc)
 ```
