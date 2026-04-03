@@ -14,7 +14,7 @@ CONFIG_EFI_RUNTIME_UPDATE_CAPSULE=y
 CONFIG_EFI_CAPSULE_FIRMWARE_RAW=y
 # CONFIG_BOOTSTD_DEFAULTS=y
 CONFIG_USE_BOOTCOMMAND=y
-CONFIG_BOOTCOMMAND="setenv bootargs 'console=ttyAMA0,115200 root=/dev/mmcblk0p2 rootwait'; fatload mmc 0:1 \${kernel_addr_r} Image; booti \${kernel_addr_r} - \${fdt_addr}"
+CONFIG_BOOTCOMMAND="setenv bootargs 'console=ttyAMA5,115200 root=/dev/mmcblk0p2 rootwait'; fatload mmc 0:1 \${kernel_addr_r} Image; booti \${kernel_addr_r} - \${fdt_addr}"
 CONFIG_OF_BOARD_SETUP=y
 CONFIG_FDT_SIMPLEFB=y
 CONFIG_USE_PREBOOT=y
