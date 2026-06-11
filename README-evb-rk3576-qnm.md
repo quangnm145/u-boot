@@ -139,6 +139,81 @@ Reuse toàn bộ `bootph-*` annotations (SFC Flash, SDMMC, SDHCI, eMMC) từ ROC
 
 ---
 
+## Cơ chế Boot
+
+### Disk layout khi flash `seek=64`
+
+```
+SD card (512 bytes/sector):
+┌──────────────────────────────────────────────────────────────┐
+│ Sector 0..63     MBR/GPT partition table (không đụng đến)    │
+├──────────────────────────────────────────────────────────────┤
+│ Sector 64..483   idbloader.img (210 KB)                      │
+│   ├── RKNS header (512 B)    ← BootROM tìm magic "RKNS"     │
+│   ├── TPL: rk3576_ddr_*.bin  (74 KB)  ← DDR init blob       │
+│   └── SPL: u-boot-spl.bin    (130 KB) ← U-Boot SPL          │
+├──────────────────────────────────────────────────────────────┤
+│ Sector 484..16383  Zero padding (7.9 MB gap)                 │
+├──────────────────────────────────────────────────────────────┤
+│ Sector 16384+    u-boot.itb (1.2 MB)  ← FIT image           │
+│   ├── [atf-1]  BL31 segment @ 0x3FE70000  (16 KB)           │
+│   ├── [atf-2]  BL31 segment @ 0x40060000  (120 KB)          │
+│   ├── [atf-3]  BL31 segment @ 0x400F0000  (20 KB)           │
+│   ├── [u-boot] U-Boot proper @ 0x40800000 (~900 KB)          │
+│   └── [fdt-1]  DTB rk3576-rock-4d-qnm.dtb (183 KB)          │
+└──────────────────────────────────────────────────────────────┘
+```
+
+> Gap 7.9MB là zero padding — binman tự chèn. Đây là lý do `u-boot-rockchip.bin` nặng 9.4MB
+> dù content thực chỉ ~1.4MB. SPL hardcode đọc FIT tại **sector 16384** (8MB từ đầu disk).
+
+### Boot flow chi tiết
+
+```
+1. BootROM (in SoC ROM)
+   └─ Tìm "RKNS" magic tại sector 64
+   └─ Load TPL vào SRAM nội (không cần DDR)
+   └─ Jump to TPL
+
+2. TPL = rk3576_ddr_lp4_*_v1.09.bin (74 KB, blob Rockchip)
+   └─ Khởi tạo DRAM controller (LPDDR4/5 training)
+   └─ Output 1,500,000 baud (hardcoded)
+   └─ Load SPL từ ngay sau TPL trong idbloader.img
+   └─ Jump to SPL
+
+3. SPL = u-boot-spl.bin (130 KB)
+   └─ Khởi tạo clocks, pinmux tối thiểu
+   └─ Đọc FIT image từ sector 16384
+   └─ Load và parse từng image node theo load address:
+       ├─ atf-1,2,3 → load BL31 segments vào địa chỉ tương ứng
+       └─ u-boot    → load vào 0x40800000
+   └─ Jump to BL31 entry (0x40060000)
+
+4. BL31 = TF-A rk3576_bl31_v1.20.elf (156 KB tổng, 3 segments)
+   └─ Setup EL3 secure world
+   └─ Cấu hình PSCI (power management)
+   └─ Jump to U-Boot proper (BL33) tại 0x40800000
+
+5. U-Boot proper @ 0x40800000
+   └─ Load DTB từ FIT → parse hardware config
+   └─ Init UART @ 115200 (từ CONFIG_BAUDRATE)
+   └─ In banner: "Model: Radxa ROCK 4D QNM"
+   └─ Boot sequence: SPI → SD → USB
+```
+
+### Tại sao BL31 có 3 FIT nodes?
+
+BL31 ELF có 3 `PT_LOAD` segments với địa chỉ khác nhau. binman dùng `split-elf` để tách thành
+3 FIT nodes riêng, mỗi node có `load` address riêng:
+
+| Node | Địa chỉ | Kích thước | Nội dung |
+|------|---------|-----------|---------|
+| atf-1 | `0x3FE70000` | 16 KB | Exception vectors |
+| atf-2 | `0x40060000` | 120 KB | Main TF-A code (entry point) |
+| atf-3 | `0x400F0000` | 20 KB | RO data / secure config |
+
+---
+
 ## Hướng dẫn Build
 
 ### Yêu cầu
