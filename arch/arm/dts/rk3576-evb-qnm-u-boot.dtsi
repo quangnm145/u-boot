@@ -1,0 +1,7 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * U-Boot overlay for RK3576 EVB QNM board.
+ * Reuses rk3576-rock-4d-u-boot.dtsi (SFC flash bootph annotations).
+ */
+
+#include "rk3576-rock-4d-u-boot.dtsi"

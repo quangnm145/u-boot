@@ -22,6 +22,13 @@ S:	Maintained
 F:	arch/arm/dts/rk3576-rock-4d*
 F:	configs/rock-4d-rk3576_defconfig
 
+EVB-RK3576-QNM
+M:	QuangNM <quangnm@local>
+S:	Maintained
+F:	arch/arm/dts/rk3576-evb-qnm-u-boot.dtsi
+F:	dts/upstream/src/arm64/rockchip/rk3576-evb-qnm.dts
+F:	configs/evb_rk3576_qnm_defconfig
+
 SIGE5-RK3576
 M:	Jonas Karlman <jonas@kwiboo.se>
 S:	Maintained
