@@ -95,15 +95,13 @@
 #endif
 			};
 			@tee-SEQ {
-				fit,operation = "split-elf";
 				description = "TEE";
 				type = "tee";
 				arch = FIT_ARCH;
 				os = "tee";
 				compression = "none";
-				fit,load;
-				fit,entry;
-				fit,data;
+				load = <0x08400000>;
+				entry = <0x08400000>;
 
 				tee-os {
 					optional;
