@@ -23,12 +23,12 @@
 		};
 		atf-1 {
 			description = "ARM Trusted Firmware";
-			data = /incbin/("rkbin_blobs/bl31_0x40040000.bin");
+			data = /incbin/("rkbin_blobs/bl31_0x40060000.bin");
 			type = "firmware";
 			arch = "arm64";
 			os = "arm-trusted-firmware";
 			compression = "none";
-			load = <0x40040000>;
+			load = <0x40060000>;
 			hash {
 				algo = "sha256";
 			};
@@ -59,7 +59,7 @@
 		};
 		optee {
 			description = "OP-TEE";
-			data = /incbin/("rkbin_blobs/tee.bin");
+			data = /incbin/("../../rkbin/bin/rk35/rk3576_bl32_v1.08.bin");
 			type = "firmware";
 			arch = "arm64";
 			os = "op-tee";
